@@ -143,15 +143,19 @@ public class UDFArrayIntersect extends GenericUDF {
                 leftCurrentPosition++;
                 rightCurrentPosition++;
 
-                Object leftArrayElementTmp1 = leftArrayOI.getListElement(leftArray, leftPositions[leftBasePosition]);
-                Object leftArrayElementTmp2 = leftArrayOI.getListElement(leftArray, leftPositions[leftCurrentPosition]);
-                Object rightArrayElementTmp1 = rightArrayOI.getListElement(rightArray, rightPositions[rightBasePosition]);
-                Object rightArrayElementTmp2 = rightArrayOI.getListElement(rightArray, rightPositions[rightCurrentPosition]);
-                while (leftCurrentPosition < leftArrayLength && ObjectInspectorUtils.compare(leftArrayElementTmp1, leftArrayElementOI, leftArrayElementTmp2, leftArrayElementOI) == 0) {
-                    leftCurrentPosition++;
+                if (leftCurrentPosition < leftArrayLength) {
+                    Object leftArrayElementTmp1 = leftArrayOI.getListElement(leftArray, leftPositions[leftBasePosition]);
+                    Object leftArrayElementTmp2 = leftArrayOI.getListElement(leftArray, leftPositions[leftCurrentPosition]);
+                    while (leftCurrentPosition < leftArrayLength && ObjectInspectorUtils.compare(leftArrayElementTmp1, leftArrayElementOI, leftArrayElementTmp2, leftArrayElementOI) == 0) {
+                        leftCurrentPosition++;
+                    }
                 }
-                while (rightCurrentPosition < rightArrayLength && ObjectInspectorUtils.compare(rightArrayElementTmp1, rightArrayElementOI, rightArrayElementTmp2, rightArrayElementOI) == 0) {
-                    rightCurrentPosition++;
+                if (rightCurrentPosition < rightArrayLength) {
+                    Object rightArrayElementTmp1 = rightArrayOI.getListElement(rightArray, rightPositions[rightBasePosition]);
+                    Object rightArrayElementTmp2 = rightArrayOI.getListElement(rightArray, rightPositions[rightCurrentPosition]);
+                    while (rightCurrentPosition < rightArrayLength && ObjectInspectorUtils.compare(rightArrayElementTmp1, rightArrayElementOI, rightArrayElementTmp2, rightArrayElementOI) == 0) {
+                        rightCurrentPosition++;
+                    }
                 }
             }
         }

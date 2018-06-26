@@ -159,6 +159,12 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>cc.shanruifeng</pattern>
+                                    <shadedPattern>kr.minhoryang</shadedPattern>
+                                </relocation>
+                            </relocations>
                             <artifactSet>
                                 <excludes>
                                     <exclude></exclude>
