@@ -148,6 +148,7 @@ public class UDFArrayIntersect extends GenericUDF {
                     Object leftArrayElementTmp2 = leftArrayOI.getListElement(leftArray, leftPositions[leftCurrentPosition]);
                     while (leftCurrentPosition < leftArrayLength && ObjectInspectorUtils.compare(leftArrayElementTmp1, leftArrayElementOI, leftArrayElementTmp2, leftArrayElementOI) == 0) {
                         leftCurrentPosition++;
+                        leftArrayElementTmp2 = leftArrayOI.getListElement(leftArray, leftPositions[leftCurrentPosition]);
                     }
                 }
                 if (rightCurrentPosition < rightArrayLength) {
@@ -155,6 +156,7 @@ public class UDFArrayIntersect extends GenericUDF {
                     Object rightArrayElementTmp2 = rightArrayOI.getListElement(rightArray, rightPositions[rightCurrentPosition]);
                     while (rightCurrentPosition < rightArrayLength && ObjectInspectorUtils.compare(rightArrayElementTmp1, rightArrayElementOI, rightArrayElementTmp2, rightArrayElementOI) == 0) {
                         rightCurrentPosition++;
+                        rightArrayElementTmp2 = rightArrayOI.getListElement(rightArray, rightPositions[rightCurrentPosition]);
                     }
                 }
             }
