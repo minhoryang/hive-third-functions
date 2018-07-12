@@ -1,6 +1,7 @@
 package cc.shanruifeng.functions.array;
 
 import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDF.DeferredJavaObject;
@@ -35,38 +36,43 @@ public class UDFArrayIntersectTest {
         assertEquals("array_intersect() test", null, output);
 
         // Try with example args
-        ArrayList<Integer> arrayA = new ArrayList<Integer>();
-        arrayA.add(16);
-        arrayA.add(12);
-        arrayA.add(18);
-        arrayA.add(9);
+        ArrayList<String> arrayA = new ArrayList<String>();
+        arrayA.add("16");
+        arrayA.add("12");
+        arrayA.add("18");
+        arrayA.add("9");
         arrayA.add(null);
-        ArrayList<Integer> arrayB = new ArrayList<Integer>();
-        arrayB.add(14);
-        arrayB.add(9);
-        arrayB.add(6);
-        arrayB.add(18);
+        ArrayList<String> arrayB = new ArrayList<String>();
+        arrayB.add("14");
+        arrayB.add("9");
+        arrayB.add("6");
+        arrayB.add("18");
         arrayB.add(null);
-        ArrayList<Integer> expectedAB = new ArrayList<Integer>();
+        ArrayList<String> expectedAB = new ArrayList<String>();
         expectedAB.add(null);
-        //expectedAB.add(9);  // TODO: Unexpected Alphabetical Ordering.
-        expectedAB.add(18);
-        expectedAB.add(9);  // XXX: Unexpected Alphabetical Ordering.
-          System.out.println("hi");
+        expectedAB.add("18");
+        expectedAB.add("9");
         DeferredObject[] exampleArgs = { new DeferredJavaObject(arrayA), new DeferredJavaObject(arrayB) };
         output = (List) udf.evaluate(exampleArgs);
         assertEquals("array_intersect() test", expectedAB, output);
 
         // Edge Case 1. Data Missing.
-        arrayB.add(18);
-        arrayB.add(18);
+        arrayB.add("18");
         DeferredObject[] edgeArgs = { new DeferredJavaObject(arrayA), new DeferredJavaObject(arrayB) };
         output = (List) udf.evaluate(edgeArgs);
         assertEquals("array_intersect() test", expectedAB, output);
          
         // Edge Case 2. Array IndexOutOfBoundsException.
-        DeferredObject[] edge2Args = { new DeferredJavaObject(ImmutableList.of(0,1,2,3,4,5)), new DeferredJavaObject(ImmutableList.of(1,1,2,2,5,5)) };
+        ArrayList<String> arrayC = new ArrayList<String>();
+        for (int i = 0; i < /* UDFArrayIntersect.INITIAL_SIZE */ 128; i++) {
+            arrayC.add(Integer.toString(i));
+        }
+        Collections.sort(arrayC);
+        ArrayList<String> arrayD = (ArrayList<String>)arrayC.clone();
+        arrayD.add(arrayD.get(arrayD.size() - 1));
+
+        DeferredObject[] edge2Args = { new DeferredJavaObject(arrayC), new DeferredJavaObject(arrayD) };
         output = (List) udf.evaluate(edge2Args);
-        assertEquals("array_intersect() test", ImmutableList.of(1,2,5), output);
+        assertEquals("array_intersect() test", arrayC, output);
     }
 }
